@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>0→1 Externalizer OS</title>
+
+<style>
+:root {
+  --bg:#0f1115; --card:#171a21; --border:#2a2f3a;
+  --text:#e5e7eb; --muted:#9ca3af; --accent:#60a5fa; --accent2:#34d399;
+}
+body {
+  margin:0; font-family:system-ui; background:var(--bg);
+  color:var(--text); max-width:1000px; margin:auto; padding:24px;
+}
+h1,h2,h3{margin-bottom:8px;}
+.card{
+  background:var(--card); border:1px solid var(--border);
+  padding:18px; border-radius:8px; margin-top:12px;
+}
+.hidden{display:none;}
+.tabs{
+  display:flex; gap:10px; margin-bottom:20px;
+}
+.tab{
+  padding:10px 16px; cursor:pointer; border-radius:6px;
+  background:#1f2937;
+}
+.tab.active{background:var(--accent); color:#000;}
+textarea, select{
+  width:100%; margin:6px 0 12px; padding:10px;
+  background:#0d1117; border:1px solid var(--border); color:var(--text);
+  border-radius:6px;
+}
+button{
+  background:var(--accent); border:none; padding:8px 14px;
+  border-radius:6px; cursor:pointer;
+}
+.template{
+  background:#0d1117; padding:12px; border-radius:6px;
+  white-space:pre-wrap; margin-top:10px;
+}
+.badge{
+  background:#1f2937; padding:4px 8px; border-radius:999px;
+  font-size:12px; margin-right:6px;
+}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:700px){.grid{grid-template-columns:1fr;}}
+#toast{
+  position:fixed; bottom:20px; left:50%;
+  transform:translateX(-50%);
+  background:var(--accent2); color:#000;
+  padding:10px 16px; border-radius:6px;
+  display:none;
+}
+</style>
+</head>
+
+<body>
+
+<h1>0→1 Externalizer</h1>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('identity')">Identity</div>
+  <div class="tab" onclick="switchTab('os')">Operating System</div>
+</div>
+
+<!-- ================= IDENTITY ================= -->
+<div id="identity">
+
+<div class="card">
+<strong>The innovation ecosystem efficiently scales solutions.</strong><br>
+It does not efficiently produce validated problem–solution pairs.<br><br>
+<strong>That is the gap I operate in.</strong>
+</div>
+
+<div class="card grid">
+<div>
+<h3>What I Do</h3>
+<ul>
+<li>Detect real-world problems</li>
+<li>Design system-level solutions</li>
+<li>Validate technically</li>
+</ul>
+</div>
+<div>
+<h3>What I Don’t Do</h3>
+<ul>
+<li>Long-term maintenance</li>
+<li>Scaling (1→N)</li>
+<li>Operational ownership</li>
+</ul>
+</div>
+</div>
+
+<div class="card">
+<strong>This is not a weakness.</strong><br>
+It means I require clear interfaces between creation and execution.
+<br><br>
+<span class="badge">0→1 Architect</span>
+<span class="badge">System Designer</span>
+<span class="badge">Problem Detector</span>
+</div>
+
+<div class="card">
+<h3>The Real Gap</h3>
+Symptom: Ideas die in silence<br>
+Cause: Lack of external clarity + packaging<br>
+Cost: <strong>Invisible work</strong>
+</div>
+
+<div class="card">
+<h3>Operating Loop</h3>
+Observe → Generate → MVE → Route → Share → Hand off
+</div>
+
+<div class="card">
+<h3>Final Principle</h3>
+Produce insights → validate → make visible, understandable, transferable
+</div>
+
+</div>
+
+<!-- ================= OS ================= -->
+<div id="os" class="hidden">
+
+<div class="card">
+<h3>MVE Constraint</h3>
+Must be completed within ~90 minutes once idea is meaningful
+</div>
+
+<div class="card">
+<h3>MVE Generator</h3>
+
+<label>Problem</label>
+<textarea id="p"></textarea>
+
+<label>Insight</label>
+<textarea id="i"></textarea>
+
+<label>Solution</label>
+<textarea id="s"></textarea>
+
+<label>Evidence</label>
+<textarea id="e"></textarea>
+
+<label>Impact</label>
+<textarea id="im"></textarea>
+
+<label>Status</label>
+<select id="st">
+<option>Concept</option>
+<option>Prototype</option>
+<option>Validated</option>
+</select>
+
+<button onclick="gen()">Generate</button>
+
+<div id="out" class="template"></div>
+<button onclick="copy()">Copy</button>
+
+</div>
+
+<div class="card">
+<h3>Routing Decision</h3>
+<ul>
+<li>Business → Founder / Venture Builder</li>
+<li>Home → Open Source / Internal</li>
+<li>Exploration → Research</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>Outreach</h3>
+<div id="msg" class="template">
+I built and tested a system that [specific outcome].
+
+Curious if this aligns with what you're working on?
+</div>
+<button onclick="copyMsg()">Copy</button>
+</div>
+
+</div>
+
+<div id="toast">Copied</div>
+
+<script>
+function switchTab(tab){
+  document.getElementById('identity').classList.add('hidden');
+  document.getElementById('os').classList.add('hidden');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+
+  document.getElementById(tab).classList.remove('hidden');
+  event.target.classList.add('active');
+}
+
+function gen(){
+  out.textContent =
+`Problem:
+${p.value}
+
+Insight:
+${i.value}
+
+Solution:
+${s.value}
+
+Evidence:
+${e.value}
+
+Impact:
+${im.value}
+
+Status:
+${st.value}`;
+}
+
+function copy(){
+  navigator.clipboard.writeText(out.textContent);
+  toast();
+}
+
+function copyMsg(){
+  navigator.clipboard.writeText(msg.textContent);
+  toast();
+}
+
+function toast(){
+  let t=document.getElementById('toast');
+  t.style.display='block';
+  setTimeout(()=>t.style.display='none',1500);
+}
+</script>
+
+</body>
+</html>

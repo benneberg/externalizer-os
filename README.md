@@ -15,3 +15,7 @@ Open the live tool:
 ## Role
 Concept/System Architect (early-stage)
 → generate → validate → hand off
+
+## Example MVE
+- Deterministic Playlist Compiler  
+  → https://github.com/benneberg/signage-video-fusion
